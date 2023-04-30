@@ -1,6 +1,9 @@
 package provider
 
-import model.*
+import model.Bundle
+import model.Library
+import model.Plugin
+import model.VersionRef
 import react.*
 
 data class BuilderState(
@@ -18,8 +21,11 @@ interface BuilderContextProps {
     val addVersion: (VersionRef) -> Unit
     val removeVersion: (VersionRef) -> Unit
     val addLibrary: (Library) -> Unit
+    val removeLibrary: (Library) -> Unit
     val addPlugin: (Plugin) -> Unit
+    val removePlugin: (Plugin) -> Unit
     val addBundle: (Bundle) -> Unit
+    val removeBundle: (Bundle) -> Unit
 }
 
 val BuilderContext = createContext<BuilderContextProps>()
@@ -47,15 +53,33 @@ val BuilderProvider = FC<BuilderProviderProps> { props ->
         }
     }
 
+    val removeLibrary: (Library) -> Unit = { library ->
+        setBuilderState {
+            it.copy(libraries = it.libraries - library)
+        }
+    }
+
     val addPlugin: (Plugin) -> Unit = { plugin ->
         setBuilderState {
             it.copy(plugins = it.plugins + plugin)
         }
     }
 
+    val removePlugin: (Plugin) -> Unit = { plugin ->
+        setBuilderState {
+            it.copy(plugins = it.plugins - plugin)
+        }
+    }
+
     val addBundle: (Bundle) -> Unit = { bundle ->
         setBuilderState {
             it.copy(bundles = it.bundles + bundle)
+        }
+    }
+
+    val removeBundle: (Bundle) -> Unit = { bundle ->
+        setBuilderState {
+            it.copy(bundles = it.bundles - bundle)
         }
     }
 
@@ -68,8 +92,11 @@ val BuilderProvider = FC<BuilderProviderProps> { props ->
             override val addVersion = addVersion
             override val removeVersion = removeVersion
             override val addLibrary = addLibrary
+            override val removeLibrary = removeLibrary
             override val addPlugin = addPlugin
+            override val removePlugin = removePlugin
             override val addBundle = addBundle
+            override val removeBundle = removeBundle
         }
         +props.children
     }

@@ -23,4 +23,11 @@ data class Library(
             is VersionNumber -> "$group:$name:${version.value}"
             is VersionRef -> "$group:$name:${version.number}"
         }
+
+    override fun toString(): String {
+        return when (version) {
+            is VersionNumber -> "$alias = { group = \"$group\", name = \"$name\", version = \"${version.value}\" }\n"
+            is VersionRef -> "$alias = { group = \"$group\", name = \"$name\", version.ref = \"${version.alias}\" }\n"
+        }
+    }
 }

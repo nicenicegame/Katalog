@@ -22,6 +22,8 @@ dependencies {
     implementation(kotlinw("react-dom"))
     implementation(kotlinw("mui"))
     implementation(kotlinw("mui-icons"))
+    implementation(kotlinw("extensions"))
+    implementation(npm("highlight.js", "11.7.0"))
 }
 
 kotlin {

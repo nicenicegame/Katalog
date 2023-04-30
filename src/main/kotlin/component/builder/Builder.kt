@@ -4,6 +4,7 @@ import component.SectionCard
 import component.builder.bundles.BundleSectionContent
 import component.builder.libraries.LibraryDialog
 import component.builder.libraries.LibrarySectionContent
+import component.builder.plugins.PluginDialog
 import component.builder.plugins.PluginSectionContent
 import component.builder.versions.VersionDialog
 import component.builder.versions.VersionSectionContent
@@ -57,6 +58,12 @@ val SectionBuilder = FC<Props> {
                 setDialogState { it.copy(isPluginDialogOpen = true) }
             }
             PluginSectionContent()
+            PluginDialog {
+                isOpen = dialogState.isPluginDialogOpen
+                onClose = {
+                    setDialogState { it.copy(isPluginDialogOpen = false) }
+                }
+            }
         }
         SectionCard {
             sectionName = "Bundles"
