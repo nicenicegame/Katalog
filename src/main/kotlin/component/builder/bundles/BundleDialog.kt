@@ -45,9 +45,7 @@ val BundleDialog = FC<BundleDialogProps> { props ->
                         size = Size.small
                         fullWidth = true
                         variant = FormControlVariant.outlined
-                        label = Fragment.create {
-                            +"Alias"
-                        }
+                        label = ReactNode("Alias")
                         onChange = { event ->
                             val value = (event as ChangeEvent<HTMLInputElement>).target.value
                             setBundleDialogState { it.copy(alias = value) }
@@ -59,6 +57,7 @@ val BundleDialog = FC<BundleDialogProps> { props ->
                     asDynamic().xs = 9
                     @Suppress("UPPER_BOUND_VIOLATED")
                     Autocomplete<AutocompleteProps<String>> {
+                        fullWidth = true
                         multiple = true
                         size = "small"
                         value = bundleDialogState.selectedRefs.toTypedArray()

@@ -48,9 +48,7 @@ val PluginDialog = FC<PluginDialogProps> { props ->
                         size = Size.small
                         fullWidth = true
                         variant = FormControlVariant.outlined
-                        label = Fragment.create {
-                            +"Alias"
-                        }
+                        label = ReactNode("Alias")
                         onChange = { event ->
                             val value = (event as ChangeEvent<HTMLInputElement>).target.value
                             setPluginDialogState { it.copy(alias = value) }
@@ -64,9 +62,7 @@ val PluginDialog = FC<PluginDialogProps> { props ->
                         size = Size.small
                         fullWidth = true
                         variant = FormControlVariant.outlined
-                        label = Fragment.create {
-                            +"Plugin ID"
-                        }
+                        label = ReactNode("Plugin ID")
                         onChange = { event ->
                             val value = (event as ChangeEvent<HTMLInputElement>).target.value
                             setPluginDialogState { it.copy(pluginId = value) }
@@ -77,9 +73,7 @@ val PluginDialog = FC<PluginDialogProps> { props ->
                     item = true
                     asDynamic().xs = 6
                     FormControlLabel {
-                        label = Fragment.create {
-                            +"Use version reference"
-                        }
+                        label = ReactNode("Use version reference")
                         control = Checkbox.create {
                             checked = pluginDialogState.isUseVersionRef
                             onChange = { _, isChecked ->

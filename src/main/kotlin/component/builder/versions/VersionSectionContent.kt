@@ -11,19 +11,15 @@ val VersionSectionContent = FC<Props> {
     List {
         builderContext?.versions?.map { version ->
             ListItem {
-                key = "${version.alias}-${version.number}"
+                key = version.toString()
                 secondaryAction = IconButton.create {
                     edge = IconButtonEdge.end
                     onClick = { builderContext.removeVersion(version) }
                     CancelRounded()
                 }
                 ListItemText {
-                    primary = Fragment.create {
-                        +version.alias
-                    }
-                    secondary = Fragment.create {
-                        +version.number
-                    }
+                    primary = ReactNode(version.alias)
+                    secondary = ReactNode(version.number)
                 }
             }
         }

@@ -33,7 +33,7 @@ val Code = FC<Props> {
     val (isCopySuccessSnackbarOpen, setIsCopySuccessSnackbarOpen) = useState(false)
     val builderContext = useContext(BuilderContext)
     val versionCatalogs = builderContext?.let {
-        VersionCatalogs.create(
+        VersionCatalogs(
             versions = builderContext.versions,
             libraries = builderContext.libraries,
             plugins = builderContext.plugins,

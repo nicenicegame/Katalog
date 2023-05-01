@@ -42,9 +42,7 @@ val VersionDialog = FC<VersionDialogProps> { props ->
                         size = Size.small
                         fullWidth = true
                         variant = FormControlVariant.outlined
-                        label = Fragment.create {
-                            +"Alias"
-                        }
+                        label = ReactNode("Alias")
                         onChange = { event ->
                             val value = (event as ChangeEvent<HTMLInputElement>).target.value
                             setVersionDialogState { it.copy(alias = value) }
@@ -58,9 +56,7 @@ val VersionDialog = FC<VersionDialogProps> { props ->
                         size = Size.small
                         fullWidth = true
                         variant = FormControlVariant.outlined
-                        label = Fragment.create {
-                            +"Version number"
-                        }
+                        label = ReactNode("Version number")
                         onChange = { event ->
                             val value = (event as ChangeEvent<HTMLInputElement>).target.value
                             setVersionDialogState { it.copy(version = value) }

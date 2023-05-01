@@ -16,6 +16,9 @@ val App = FC<Props> {
         Container {
             maxWidth = "md"
             Typography {
+                sx {
+                    marginBottom = 2.rem
+                }
                 variant = TypographyVariant.h4
                 +"Katalog"
             }
@@ -29,14 +32,10 @@ val App = FC<Props> {
                         setSelectedTabValue { value }
                     }
                     Tab {
-                        label = Fragment.create {
-                            +"Builder"
-                        }
+                        label = ReactNode("Builder")
                     }
                     Tab {
-                        label = Fragment.create {
-                            +"Code"
-                        }
+                        label = ReactNode("Code")
                     }
                 }
                 Divider()

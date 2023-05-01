@@ -13,22 +13,15 @@ val LibrarySectionContent = FC<Props> {
     List {
         builderContext?.libraries?.map { library ->
             ListItem {
-                key = when (library.version) {
-                    is VersionNumber -> "${library.alias}-${library.group}-${library.name}-${library.version.value}"
-                    is VersionRef -> "${library.alias}-${library.group}-${library.name}-${library.version.number}"
-                }
+                key = library.toString()
                 secondaryAction = IconButton.create {
                     edge = IconButtonEdge.end
                     onClick = { builderContext.removeLibrary(library) }
                     CancelRounded()
                 }
                 ListItemText {
-                    primary = Fragment.create {
-                        +library.alias
-                    }
-                    secondary = Fragment.create {
-                        +library.artifactId
-                    }
+                    primary = ReactNode(library.alias)
+                    secondary = ReactNode(library.artifactId)
                 }
             }
         }

@@ -48,9 +48,7 @@ val LibraryDialog = FC<LibraryDialogProps> { props ->
                         size = Size.small
                         fullWidth = true
                         variant = FormControlVariant.outlined
-                        label = Fragment.create {
-                            +"Alias"
-                        }
+                        label = ReactNode("Alias")
                         onChange = { event ->
                             val value = (event as ChangeEvent<HTMLInputElement>).target.value
                             setLibraryDialogState { it.copy(alias = value) }
@@ -64,9 +62,7 @@ val LibraryDialog = FC<LibraryDialogProps> { props ->
                         size = Size.small
                         fullWidth = true
                         variant = FormControlVariant.outlined
-                        label = Fragment.create {
-                            +"Artifact ID"
-                        }
+                        label = ReactNode("Artifact ID")
                         onChange = { event ->
                             val value = (event as ChangeEvent<HTMLInputElement>).target.value
                             setLibraryDialogState { it.copy(artifactId = value) }
@@ -77,9 +73,7 @@ val LibraryDialog = FC<LibraryDialogProps> { props ->
                     item = true
                     asDynamic().xs = 6
                     FormControlLabel {
-                        label = Fragment.create {
-                            +"Use version reference"
-                        }
+                        label = ReactNode("Use version reference")
                         control = Checkbox.create {
                             checked = libraryDialogState.isUseVersionRef
                             onChange = { _, isChecked ->
