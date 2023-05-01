@@ -1,0 +1,22 @@
+name: Deploy to GitHub Pages
+on:
+  workflow_run:
+    workflows: [ Build project ]
+    types: [ completed ]
+jobs:
+  on-success:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Execute Gradle Webpack production build
+        run: gradle jsBrowserProductionWebpack
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.5
+        with:
+          branch: gh-pages
+          folder: build/distributions
+  on-failure:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - run: echo 'The triggering workflow failed'
