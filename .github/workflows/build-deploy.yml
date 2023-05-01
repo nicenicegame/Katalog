@@ -1,0 +1,23 @@
+name: Build project
+on: push
+jobs:
+  build:
+    name: Build Gradle project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Execute Gradle build
+        run: ./gradlew build
+  deploy:
+    needs: build
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Execute Gradle Webpack production build
+        run: ./gradlew browserProductionWebpack
+      - name: Deploy distribution
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build/distributions
+          token: ${{ secrets.ACCESS_TOKEN }}
