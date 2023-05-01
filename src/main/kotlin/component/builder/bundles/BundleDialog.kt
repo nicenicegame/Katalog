@@ -1,6 +1,6 @@
 package component.builder.bundles
 
-import model.Library
+import model.Bundle
 import mui.material.*
 import mui.system.responsive
 import provider.BuilderContext
@@ -16,12 +16,15 @@ external interface BundleDialogProps : Props {
 
 data class BundleDialogState(
     val alias: String = "",
-    val selectedLibrary: List<Library> = emptyList()
+    val selectedRefs: List<String> = emptyList()
 )
 
 val BundleDialog = FC<BundleDialogProps> { props ->
     val builderContext = useContext(BuilderContext)
     val (bundleDialogState, setBundleDialogState) = useState(BundleDialogState())
+    val libraryRefs = useMemo(builderContext?.versions) {
+        builderContext?.libraries?.map { it.alias }?.toTypedArray() ?: emptyArray()
+    }
 
     Dialog {
         open = props.isOpen
@@ -54,16 +57,22 @@ val BundleDialog = FC<BundleDialogProps> { props ->
                 Grid {
                     item = true
                     asDynamic().xs = 9
-                    TextField {
-                        size = Size.small
-                        fullWidth = true
-                        variant = FormControlVariant.outlined
-                        label = Fragment.create {
-                            +"Artifact ID"
+                    @Suppress("UPPER_BOUND_VIOLATED")
+                    Autocomplete<AutocompleteProps<String>> {
+                        multiple = true
+                        size = "small"
+                        value = bundleDialogState.selectedRefs.toTypedArray()
+                        onChange = { _, value: Array<String>, _, _ ->
+                            setBundleDialogState {
+                                it.copy(selectedRefs = value.toList())
+                            }
                         }
-                        onChange = { event ->
-                            val value = (event as ChangeEvent<HTMLInputElement>).target.value
-//                            setBundleDialogState { it.copy(pluginId = value) }
+                        options = libraryRefs
+                        renderInput = { params ->
+                            TextField.create {
+                                label = ReactNode("Version alias")
+                                +params
+                            }
                         }
                     }
                 }
@@ -76,15 +85,17 @@ val BundleDialog = FC<BundleDialogProps> { props ->
                 +"Cancel"
             }
             Button {
-//                onClick = {
-//                    builderContext?.addLibrary?.invoke(
-//                        Library.create(
-//                            alias = bundleDialogState.alias,
-//                            artifactId = bundleDialogState.pluginId
-//                        )
-//                    )
-//                    props.onClose()
-//                }
+                onClick = {
+                    builderContext?.addBundle?.invoke(
+                        Bundle(
+                            alias = bundleDialogState.alias,
+                            group = builderContext.libraries.filter {
+                                it.alias in bundleDialogState.selectedRefs
+                            }
+                        )
+                    )
+                    props.onClose()
+                }
                 +"Submit"
             }
         }

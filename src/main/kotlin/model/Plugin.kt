@@ -7,11 +7,20 @@ data class Plugin(
 ) {
     companion object {
         fun create(alias: String, pluginId: String): Plugin {
-            val (id, version) = pluginId.split(":", limit = 2)
+            val (id, version) = pluginId.split(":")
             return Plugin(
                 alias = alias,
                 id = id,
                 version = VersionNumber(version)
+            )
+        }
+
+        fun create(alias: String, pluginId: String, ref: VersionRef): Plugin {
+            val (id) = pluginId.split(":")
+            return Plugin(
+                alias = alias,
+                id = id,
+                version = ref
             )
         }
     }

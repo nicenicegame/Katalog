@@ -1,7 +1,7 @@
 package component.builder.plugins
 
-import model.Library
 import model.Plugin
+import model.VersionRef
 import mui.material.*
 import mui.system.responsive
 import provider.BuilderContext
@@ -17,12 +17,17 @@ external interface PluginDialogProps : Props {
 
 data class PluginDialogState(
     val alias: String = "",
-    val pluginId: String = ""
+    val pluginId: String = "",
+    val isUseVersionRef: Boolean = false,
+    val selectedRef: String? = null
 )
 
 val PluginDialog = FC<PluginDialogProps> { props ->
     val builderContext = useContext(BuilderContext)
     val (pluginDialogState, setPluginDialogState) = useState(PluginDialogState())
+    val versionRefs = useMemo(builderContext?.versions) {
+        builderContext?.versions?.map { it.alias }?.toTypedArray() ?: emptyArray()
+    }
 
     Dialog {
         open = props.isOpen
@@ -30,7 +35,7 @@ val PluginDialog = FC<PluginDialogProps> { props ->
             props.onClose()
         }
         DialogTitle {
-            +"Add library"
+            +"Add plugin"
         }
         DialogContent {
             Grid {
@@ -60,11 +65,47 @@ val PluginDialog = FC<PluginDialogProps> { props ->
                         fullWidth = true
                         variant = FormControlVariant.outlined
                         label = Fragment.create {
-                            +"Artifact ID"
+                            +"Plugin ID"
                         }
                         onChange = { event ->
                             val value = (event as ChangeEvent<HTMLInputElement>).target.value
                             setPluginDialogState { it.copy(pluginId = value) }
+                        }
+                    }
+                }
+                Grid {
+                    item = true
+                    asDynamic().xs = 6
+                    FormControlLabel {
+                        label = Fragment.create {
+                            +"Use version reference"
+                        }
+                        control = Checkbox.create {
+                            checked = pluginDialogState.isUseVersionRef
+                            onChange = { _, isChecked ->
+                                setPluginDialogState { it.copy(isUseVersionRef = isChecked) }
+                            }
+                        }
+                    }
+                }
+                if (pluginDialogState.isUseVersionRef) {
+                    Grid {
+                        item = true
+                        asDynamic().xs = 6
+                        @Suppress("UPPER_BOUND_VIOLATED")
+                        Autocomplete<AutocompleteProps<String>> {
+                            size = "small"
+                            value = pluginDialogState.selectedRef
+                            onChange = { _, value, _, _ ->
+                                setPluginDialogState { it.copy(selectedRef = value) }
+                            }
+                            options = versionRefs
+                            renderInput = { params ->
+                                TextField.create {
+                                    label = ReactNode("Version alias")
+                                    +params
+                                }
+                            }
                         }
                     }
                 }
@@ -79,10 +120,18 @@ val PluginDialog = FC<PluginDialogProps> { props ->
             Button {
                 onClick = {
                     builderContext?.addPlugin?.invoke(
-                        Plugin.create(
-                            alias = pluginDialogState.alias,
-                            pluginId = pluginDialogState.pluginId
-                        )
+                        if (pluginDialogState.isUseVersionRef && pluginDialogState.selectedRef != null)
+                            Plugin.create(
+                                alias = pluginDialogState.alias,
+                                pluginId = pluginDialogState.pluginId,
+                                ref = builderContext.versions.find { it.alias === pluginDialogState.selectedRef }
+                                    ?: VersionRef("", "")
+                            )
+                        else
+                            Plugin.create(
+                                alias = pluginDialogState.alias,
+                                pluginId = pluginDialogState.pluginId
+                            )
                     )
                     props.onClose()
                 }

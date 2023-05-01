@@ -19,7 +19,7 @@ val LibrarySectionContent = FC<Props> {
                 }
                 secondaryAction = IconButton.create {
                     edge = IconButtonEdge.end
-//                    onClick = { builderContext.removeVersion(version) }
+                    onClick = { builderContext.removeLibrary(library) }
                     CancelRounded()
                 }
                 ListItemText {

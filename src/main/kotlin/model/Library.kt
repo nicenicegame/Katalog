@@ -8,12 +8,22 @@ data class Library(
 ) {
     companion object {
         fun create(alias: String, artifactId: String): Library {
-            val (group, name, version) = artifactId.split(":", limit = 3)
+            val (group, name, version) = artifactId.split(":")
             return Library(
                 alias = alias,
                 group = group,
                 name = name,
                 version = VersionNumber(version)
+            )
+        }
+
+        fun create(alias: String, artifactId: String, ref: VersionRef): Library {
+            val (group, name) = artifactId.split(":")
+            return Library(
+                alias = alias,
+                group = group,
+                name = name,
+                version = ref
             )
         }
     }
@@ -26,8 +36,12 @@ data class Library(
 
     override fun toString(): String {
         return when (version) {
-            is VersionNumber -> "$alias = { group = \"$group\", name = \"$name\", version = \"${version.value}\" }\n"
-            is VersionRef -> "$alias = { group = \"$group\", name = \"$name\", version.ref = \"${version.alias}\" }\n"
+            is VersionNumber -> "$alias = { group = \"$group\", name = \"$name\", version = \"${version.value}\" }"
+            is VersionRef -> "$alias = { group = \"$group\", name = \"$name\", version.ref = \"${version.alias}\" }"
         }
     }
+}
+
+external interface LibraryJSO {
+
 }

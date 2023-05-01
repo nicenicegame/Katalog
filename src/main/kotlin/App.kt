@@ -14,7 +14,7 @@ val App = FC<Props> {
 
     BuilderProvider {
         Container {
-            maxWidth = "sm"
+            maxWidth = "md"
             Typography {
                 variant = TypographyVariant.h4
                 +"Katalog"
