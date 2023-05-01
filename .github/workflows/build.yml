@@ -16,4 +16,4 @@ jobs:
           gradle-version: wrapper
 
       - name: Execute Gradle build
-        run: ./gradlew build
+        run: gradle build
